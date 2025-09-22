@@ -1,40 +1,37 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Page } from '../types';
 
 interface HeaderProps {
-  activePage: Page;
   onNavigate: (page: Page) => void;
   mobileMenuOpen: boolean;
   onToggleMobileMenu: () => void;
 }
 
-const navItems: { label: string; page: Page }[] = [
-  { label: 'Home', page: 'home' },
-  { label: 'The Games', page: 'games' },
-  { label: 'AI Coach', page: 'coach' },
-  { label: 'Leaderboard', page: 'leaderboard' },
-  { label: 'Learning Hub', page: 'learning' }
+const navItems: { label: string; page: Page; path: string }[] = [
+  { label: 'Home', page: 'home', path: '/' },
+  { label: 'The Games', page: 'games', path: '/games' },
+  { label: 'AI Coach', page: 'coach', path: '/coach' },
+  { label: 'Leaderboard', page: 'leaderboard', path: '/leaderboard' },
+  { label: 'Learning Hub', page: 'learning', path: '/learning' }
 ];
 
-const Header: React.FC<HeaderProps> = ({
-  activePage,
-  onNavigate,
-  mobileMenuOpen,
-  onToggleMobileMenu
-}) => {
-  const renderNavLink = ({ label, page }: { label: string; page: Page }) => (
-    <button
+const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, onToggleMobileMenu, onNavigate }) => {
+  const renderNavLink = ({ label, page, path }: { label: string; page: Page; path: string }) => (
+    <NavLink
       key={page}
-      className={`nav-link text-sm md:text-base px-3 py-2 rounded-md transition-colors duration-200 ${
-        activePage === page
-          ? 'text-white bg-cyan-600 md:bg-transparent md:text-cyan-400'
-          : 'text-gray-300 hover:text-white'
-      }`}
+      to={path}
       onClick={() => onNavigate(page)}
-      type="button"
+      className={({ isActive }) =>
+        `nav-link text-sm md:text-base px-3 py-2 rounded-md transition-colors duration-200 ${
+          isActive
+            ? 'text-white bg-cyan-600 md:bg-transparent md:text-cyan-400'
+            : 'text-gray-300 hover:text-white'
+        }`
+      }
     >
       {label}
-    </button>
+    </NavLink>
   );
 
   return (
@@ -73,18 +70,18 @@ const Header: React.FC<HeaderProps> = ({
         <div className="md:hidden bg-gray-800 border-t border-gray-700">
           <div className="flex flex-col px-4 py-2 space-y-1">
             {navItems.map(item => (
-              <button
+              <NavLink
                 key={item.page}
+                to={item.path}
                 onClick={() => onNavigate(item.page)}
-                className={`text-left py-2 px-2 rounded-md ${
-                  activePage === item.page
-                    ? 'bg-cyan-600 text-white'
-                    : 'text-gray-300 hover:bg-gray-700'
-                }`}
-                type="button"
+                className={({ isActive }) =>
+                  `text-left py-2 px-2 rounded-md ${
+                    isActive ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-gray-700'
+                  }`
+                }
               >
                 {item.label}
-              </button>
+              </NavLink>
             ))}
           </div>
         </div>
