@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {},
   "dependencies": {
+    "@google/generative-ai": "^0.11.3",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {

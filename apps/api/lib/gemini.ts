@@ -1,8 +1,11 @@
+import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const DEFAULT_MODEL = 'gemini-2.5-flash-preview-05-20';
+const DEFAULT_MODEL = 'gemini-1.5-flash-preview-0514';
+const GEMINI_PRO_MODEL = 'gemini-pro';
+const BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 interface GeminiCandidatePart {
   text?: string;
@@ -28,29 +31,23 @@ const createRequestPayload = (prompt: string) => ({
   ]
 });
 
-export async function callGemini(prompt: string): Promise<string> {
+function getGenerativeModel(modelName: string = DEFAULT_MODEL): GenerativeModel {
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
     throw new Error('Gemini API key is not configured. Set GEMINI_API_KEY in the environment.');
   }
 
-  const model = process.env.GEMINI_MODEL ?? DEFAULT_MODEL;
-  const baseUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  const googleAI = new GoogleGenerativeAI(apiKey);
+  return googleAI.getGenerativeModel({ model: modelName });
+}
 
-  const response = await fetch(baseUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(createRequestPayload(prompt))
-  });
+export async function callGemini(prompt: string): Promise<string> {
+  const modelName = process.env.GEMINI_MODEL ?? DEFAULT_MODEL;
+  const model = getGenerativeModel(modelName);
 
-  if (!response.ok) {
-    const message = await response.text();
-    throw new Error(`Gemini API request failed (${response.status}): ${message}`);
-  }
-
-  const result = (await response.json()) as GeminiResponse;
-  const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
 
   if (!text) {
     throw new Error('Gemini API returned an unexpected response.');
