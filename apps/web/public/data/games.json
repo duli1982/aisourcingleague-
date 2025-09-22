@@ -1,0 +1,14 @@
+[
+  {
+    "id": "boolean-blacksmith",
+    "title": "Game 1: The Boolean Blacksmith",
+    "scenario": "You have a new role: Senior Backend Engineer specializing in distributed systems, located in Vienna, Austria. The client requires experience with Go (Golang) and Kubernetes and prefers candidates who contribute to open-source projects.",
+    "objective": "Craft the most effective Boolean search string to surface these candidates on a professional networking site.",
+    "focus": [
+      "Go (Golang)",
+      "Kubernetes",
+      "Open-source contributions",
+      "Distributed systems"
+    ]
+  }
+]
