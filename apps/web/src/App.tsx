@@ -6,6 +6,7 @@ import GamePlay from './components/GamePlay';
 import CoachChat from './components/CoachChat';
 import Leaderboard from './components/Leaderboard';
 import LearningHub from './components/LearningHub';
+import Greeting from './components/Greeting';
 import { PlayerProvider, usePlayerStore } from './store/playerStore';
 import { Game, Page } from './types';
 
@@ -78,6 +79,7 @@ const AppShell: React.FC = () => {
               <h2 className="text-3xl font-bold text-cyan-400 mb-4">
                 Welcome{player ? `, ${player.name}` : ''}!
               </h2>
+              <Greeting />
               <p className="text-gray-300 mb-6">
                 You are now part of a global competition for top tech recruiters. Compete in sourcing games, learn from our AI
                 Coach, and climb the leaderboard to prove you're the best.

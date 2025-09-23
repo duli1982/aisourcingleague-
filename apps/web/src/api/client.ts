@@ -9,7 +9,7 @@ interface CoachResponse {
   response: string;
 }
 
-async function handleResponse<T>(response: Response): Promise<T> {
+export async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const message = await response.text();
     throw new Error(message || 'Request failed');
